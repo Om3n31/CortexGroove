@@ -1,7 +1,8 @@
 
 # Local creation
 
-from src.main_lib.iNeuralNetwork import INeuralNetwork
+from main_lib.INeuralNetwork import INeuralNetwork
+from main_lib.tools import *
 
 class Engine:
 
@@ -16,6 +17,7 @@ class Engine:
             layer.run(data)
             data = layer.output
         print(data)
+        return data
 
 class Layer:
 
@@ -34,22 +36,13 @@ class Layer:
                 nn.run(inputData)
             outputTemp.append(nn.output)
         
-        self.output = self.flatten_list(outputTemp)
-
-    def flatten_list(self, lst):
-        result = []
-        for item in lst:
-            if isinstance(item, list):
-                result.extend(self.flatten_list(item))
-            else:
-                result.append(item)
-        return result
+        self.output = flatten_list(outputTemp)
 
 
 if __name__ == '__main__':
-    a = INeuralNetwork(3,2)
-    b = INeuralNetwork(4,4)
-    c = INeuralNetwork(6,2)
+    a = INeuralNetwork()
+    b = INeuralNetwork()
+    c = INeuralNetwork()
     a.name = "a"
     b.name = "b"
     c.name = "c"

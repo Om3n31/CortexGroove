@@ -2,10 +2,11 @@ import numpy as np
 from tensorflow import keras
 
 
-class NeuralNetwork:
+class UserNeuralNetwork:
 
     def __init__(self, shape):
         neurons_quantity = 32
+        self.shape = shape
         # Build a model
         self.model = keras.Sequential([
             keras.layers.Dense(neurons_quantity, activation='relu', input_shape=[shape[0]]),

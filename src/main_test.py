@@ -3,16 +3,22 @@ import random
 import numpy as np
 from numpy import array
 
-from NeuralNetwork import NeuralNetwork
+from main_lib.Engine import Engine
 from NeuralNetworkCortex import NeuralNetworkCortex
 
-def function(input_data):
-    return (input_data[0] / 2) + input_data[1] - input_data[2]
+def functionNN1(input_data):
+    return (input_data[0] / 2) + input_data[1] - input_data[2], input_data[1] * 2
 
-def createSet():
+def functionNN2(input_data):
+    return input_data[0] - input_data[1]
+
+def functionNN3(input_data):
+    return input_data[0] + input_data[1] - input_data[2]
+
+def createSet(function, size):
     # Generate a data set
     num_samples = 10000
-    input_data = np.random.rand(num_samples, 3)
+    input_data = np.random.rand(num_samples, size)
     output_data = np.array([function(x) for x in input_data])
 
     # Split the data into train and test
@@ -23,22 +29,26 @@ def createSet():
     test_output = output_data[8000:]
     return train_input, train_output, test_input, test_output
 
+math_functions = [functionNN1, functionNN2, functionNN3]
+# shapes = [[3,2], [2,1], [3,1]]
+shapes = [[3,2], [2,1], [3,1]]
+nn_list = []
 
-train_input, train_output, test_input, test_output = createSet()
-shape = [3,1] # It means that the model will take a list of 3 element in input and will output one element
-nn = NeuralNetworkCortex(shape)
-nn.train(train_input, train_output)
-nn.test(test_input, test_output)
-prediction_data = [1,0,1]
-print(f"Result of {prediction_data} is {nn.predict([prediction_data])}")
+for index, function in enumerate(math_functions):
+    shape = shapes[index] # It means that the model will take a list of 3 element in input and will output one element
+    train_input, train_output, test_input, test_output = createSet(function, shape[0])
+    nn = NeuralNetworkCortex(shape)
+    nn.train(train_input, train_output, epochs=5)
+    nn.test(test_input, test_output)
+    # prediction_data = [0,1,1]
+    # print(f"Result of {prediction_data} is {nn.predict([prediction_data])}")
+    nn_list.append(nn)
 
-# a = NeuralNetworkCortex(3, 2)
-# b = NeuralNetworkCortex(4, 4)
-# c = NeuralNetworkCortex(6, 2)
-# a.name = "a"
-# b.name = "b"
-# c.name = "c"
-#
-# NNetMatrix = [[a, b], [c]]
-# engine = Engine(NNetMatrix)
-# engine.run([[1, 2, 3], [4, 5, 6, 7]])
+
+NNetMatrix = [[nn_list[0], nn_list[1]], [nn_list[2]]]
+engine = Engine(NNetMatrix)
+test_data = [[1, 2, 3], [4, 5]]
+result_nn1 = functionNN1(test_data[0])
+result = functionNN3([result_nn1[0], result_nn1[1], functionNN2(test_data[1])])
+
+print(f"Result : {engine.run(test_data)}, expected result : {result}")

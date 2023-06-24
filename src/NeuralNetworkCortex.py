@@ -1,8 +1,8 @@
-from NeuralNetwork import NeuralNetwork
-from main_lib.iNeuralNetwork import INeuralNetwork
+from UserNeuralNetwork  import UserNeuralNetwork
+from main_lib.INeuralNetwork import INeuralNetwork
 
 
-class NeuralNetworkCortex(NeuralNetwork, INeuralNetwork):
+class NeuralNetworkCortex(UserNeuralNetwork, INeuralNetwork):
     """
     This class inherit from the Neural Network which is the network from the lib.
     It's also inherit from the INeuralNetwork which is the interface to work with the CortexGroove engine.
@@ -12,14 +12,15 @@ class NeuralNetworkCortex(NeuralNetwork, INeuralNetwork):
         super(NeuralNetworkCortex, self).__init__(shape)
         # super(INeuralNetwork, self).__init__()
 
-    def train(self, train_input, train_output):
+    def train(self, train_input, train_output, epochs=10):
         """
         Might be useful for later, if we want to train the data dynamically
+        :param epochs:
         :param train_input:
         :param train_output:
         :return:
         """
-        super(NeuralNetworkCortex, self).train(train_input, train_output)
+        super(NeuralNetworkCortex, self).train(train_input, train_output, epochs)
 
     def predict(self, data):
         """
@@ -28,4 +29,8 @@ class NeuralNetworkCortex(NeuralNetwork, INeuralNetwork):
         :return:
         """
         prediction = super(NeuralNetworkCortex, self).predict(data)
-        return prediction
+        print(f"Input data : {data}, result : {prediction.tolist()}")
+        return prediction.tolist()
+
+    def run(self, data):
+        self.output = self.predict([data])
