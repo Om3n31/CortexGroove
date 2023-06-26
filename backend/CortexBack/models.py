@@ -3,6 +3,7 @@ from django.db import models
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
     state = models.TextField()
+    allowed_methods = ['get']
 
 class NeuralNetwork(models.Model):
     hdf5 = models.ForeignKey(HDF5, on_delete=models.CASCADE)

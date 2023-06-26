@@ -21,6 +21,8 @@ from rest_framework.authtoken import views as auth_views
 from rest_framework.routers import DefaultRouter
 from rest_framework import serializers, viewsets
 from . import models
+from rest_framework.response import Response
+from rest_framework.views import status
 
 router = DefaultRouter()
 
@@ -32,13 +34,17 @@ for model in apps.get_models():
         {'Meta': type('Meta', (object,), {'model': model, 'fields': '__all__'})}
     )
 
+    # Get the allowed methods from the model
+    allowed_methods = getattr(model, 'allowed_methods', ['get', 'post', 'head', 'options', 'put', 'patch', 'delete'])
+
     viewset = type(
         f'{model_name}ViewSet',
         (viewsets.ModelViewSet,),
-        {'queryset': model.objects.all(), 'serializer_class': serializer}
+        {'queryset': model.objects.all(), 'serializer_class': serializer, 'http_method_names': allowed_methods}
     )
-
+    
     router.register(rf'{model_name.lower()}', viewset)
+
 
 
 urlpatterns = [
