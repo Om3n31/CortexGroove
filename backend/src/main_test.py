@@ -44,7 +44,6 @@ for index, function in enumerate(math_functions):
     # print(f"Result of {prediction_data} is {nn.predict([prediction_data])}")
     nn_list.append(nn)
 
-
 NNetMatrix = [[nn_list[0], nn_list[1]], [nn_list[2]]]
 engine = Engine(NNetMatrix)
 test_data = [[1, 2, 3], [4, 5]]
