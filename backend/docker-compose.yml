@@ -3,7 +3,10 @@ services:
   tf-container:
     build: .
     volumes:
-      - ./framework_source:/framework_source
+      - ../backend/:/backend
+    networks:
+        cortexgroove-storage:
+          ipv4_address: 172.16.238.4
   storage:
     image: postgres:latest
     networks:
@@ -18,11 +21,10 @@ services:
       - ./data:/var/lib/postgresql/data
   storage-client:
     image: dpage/pgadmin4:latest
+    user: "0"
     networks:
       cortexgroove-storage:
         ipv4_address: 172.16.238.3
-    depends_on:
-      - db
     ports:
       - 15432:80
     environment:

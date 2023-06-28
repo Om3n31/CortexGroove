@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'cortex_groove',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'USER': 'admin@admin.com',
+        'PASSWORD': 'temp_dev_password',
+        'HOST': '172.16.238.3',
+        'PORT': '80',
     }
 }
 
