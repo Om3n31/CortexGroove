@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>product details for {{ id }}</p>
+        <p>Cortex #{{ id }}</p>
     </div>
 </template>
 
