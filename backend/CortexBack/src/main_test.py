@@ -51,3 +51,7 @@ result_nn1 = functionNN1(test_data[0])
 result = functionNN3([result_nn1[0], result_nn1[1], functionNN2(test_data[1])])
 
 print(f"Result : {engine.run(test_data)}, expected result : {result}")
+
+engine = Engine()
+engine.setFirstLayer
+

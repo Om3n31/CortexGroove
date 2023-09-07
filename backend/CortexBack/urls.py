@@ -23,8 +23,20 @@ from rest_framework import serializers, viewsets
 from . import models
 from rest_framework.response import Response
 from rest_framework.views import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from functools import partial
 
 router = DefaultRouter()
+
+
+def handle_custom_action(self, request, pk=None, model=None, action_func=None):
+    # get the model instance based on pk
+    instance = model.objects.get(pk=pk)
+    # call the action function
+    result = action_func(instance)
+    return Response({'result': result})
+
 
 for model in apps.get_models():
     model_name = model.__name__
@@ -42,9 +54,24 @@ for model in apps.get_models():
         (viewsets.ModelViewSet,),
         {'queryset': model.objects.all(), 'serializer_class': serializer, 'http_method_names': allowed_methods}
     )
-    
-    router.register(rf'{model_name.lower()}', viewset)
 
+    for attr in dir(model):
+        func = getattr(model, attr)
+        if hasattr(func, 'api_action'):
+            # Function factory to create a function with a specific name
+            def create_action_func(name):
+                def action_func(self, request, pk=None):
+                    return Response({})
+                action_func.__name__ = name
+                return action_func
+
+            action_func = create_action_func(func.api_action['name'])
+            action_decorator = action(detail=True, methods=[func.api_action['method']])
+            decorated_func = action_decorator(action_func)
+
+            setattr(viewset, func.api_action['name'], decorated_func)
+
+    router.register(rf'{model_name.lower()}', viewset)
 
 
 urlpatterns = [

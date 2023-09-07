@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'CortexBack.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cortex_groove',
-        'USER': 'admin@admin.com',
-        'PASSWORD': 'temp_dev_password',
-        'HOST': '172.16.238.3',
-        'PORT': '80',
+        'NAME': 'cortex_db',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
