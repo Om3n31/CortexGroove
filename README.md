@@ -8,6 +8,64 @@ Changelog :
     L'Engine et l'interface sont dans le dossier src/main_lib
     Et un exemple de NN implémenté à l'engine se trouve dans src/main_test.py
 
+Exemple d'utilisation de la librairie : 
+```python
+from CortexGroove import INeuralNetwork, Engine
+
+"""
+    On hérite d'une part du réseau de neurone utilisateur, et d'autre part de l'interface de CortexGroove
+    Ici le réseau de l'utilisateur est TensorFlowNeuralNetwork, mais il peut s'agir de n'importe quel réseau de neurone.
+"""
+class NeuralNetworkCortex(TensorFlowNeuralNetwork, INeuralNetwork):
+    
+    # Ici "shape" correspond à la forme du réseau, tel que : [format de donnée en entrée, format de donnée en sortie]
+    # Exemple plus bas
+    def __init__(self, shape):
+        ...
+
+    # Méthode hérité de INeuralNetwork, qui va permettre de faire le lien entre CortexGroove et le réseau utilisateur
+    def run(self, data):
+        return TensorFlowNeuralNetwork.run(data)
+
+
+# On initialise les réseaux en leur donnants leurs formes
+neural_network_1 = NeuralNetworkCortex([3, 2])
+neural_network_2 = NeuralNetworkCortex([2, 1])
+neural_network_3 = NeuralNetworkCortex([3, 1])
+
+# Création de l'orchestrateur
+engine = Engine()
+
+# Création des première couches
+engine.set_layer(neural_network_1, layer_index: 0)
+engine.set_layer(neural_network_2, layer_index: 0)
+
+# Création de la dernière couches
+engine.set_layer(neural_network_3, layer_index: 1)
+
+
+"""
+On peut maintenant tester notre réseau :
+    En prenant des réseaux entrainés pour résoudre les fonctions respectives suivante :
+        réseau 1 : [ (x0 / 2) + x1 - x2, x1 * 2 ]
+        réseau 2 : [ x3 - x4 ]
+        réseau 3 : [ y0 + y1 - y2 ]
+"""
+
+# Donnée de tests :
+test_data = [
+    [1, 2, 3], # x0 x1 x2
+    [4, 5]     # x3 x4
+]
+
+expected_result = 4.5 # z
+
+# On essaye de prédire un nouveau résultat
+result = engine.run(test_data)
+
+print(f"Result : {result}, expected result : {expected_result}")
+```
+
 
 docker image :
 tensorflow/tensorflow

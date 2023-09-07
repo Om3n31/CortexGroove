@@ -8,8 +8,9 @@ class NeuralNetworkCortex(UserNeuralNetwork, INeuralNetwork):
     It's also inherit from the INeuralNetwork which is the interface to work with the CortexGroove engine.
     """
 
-    def __init__(self, shape):
+    def __init__(self, shape, training_function=None):
         super(NeuralNetworkCortex, self).__init__(shape)
+        self.training_function = training_function
         # super(INeuralNetwork, self).__init__()
 
     def train(self, train_input, train_output, epochs=10):
@@ -29,7 +30,7 @@ class NeuralNetworkCortex(UserNeuralNetwork, INeuralNetwork):
         :return:
         """
         prediction = super(NeuralNetworkCortex, self).predict(data)
-        print(f"Input data : {data}, result : {prediction.tolist()}")
+        print(f"Input data : {data}, result : {prediction.tolist()}, expected result : {self.training_function(data)}")
         return prediction.tolist()
 
     def run(self, data):

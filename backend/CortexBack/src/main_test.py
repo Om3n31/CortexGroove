@@ -37,7 +37,7 @@ nn_list = []
 for index, function in enumerate(math_functions):
     shape = shapes[index] # It means that the model will take a list of 3 element in input and will output one element
     train_input, train_output, test_input, test_output = createSet(function, shape[0])
-    nn = NeuralNetworkCortex(shape)
+    nn = NeuralNetworkCortex(shape, training_function: function)
     nn.train(train_input, train_output, epochs=5)
     nn.test(test_input, test_output)
     # prediction_data = [0,1,1]
@@ -52,6 +52,15 @@ result = functionNN3([result_nn1[0], result_nn1[1], functionNN2(test_data[1])])
 
 print(f"Result : {engine.run(test_data)}, expected result : {result}")
 
-engine = Engine()
-engine.setFirstLayer
+# # Création de l'orchestrateur
+# engine = Engine()
 
+# # Création des première couches
+# engine.set_layer(shape: [3, 2], layer_index: 0)
+# engine.set_layer(shape: [2, 1], layer_index: 0)
+
+# # Création de la dernière couches
+# engine.set_layer(shape: [3, 1], layer_index: 1)
+
+# test_data = [[1, 2, 3], [4, 5]]
+# engine.run(test_data)
