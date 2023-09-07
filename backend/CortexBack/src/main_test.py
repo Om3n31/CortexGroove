@@ -37,7 +37,7 @@ nn_list = []
 for index, function in enumerate(math_functions):
     shape = shapes[index] # It means that the model will take a list of 3 element in input and will output one element
     train_input, train_output, test_input, test_output = createSet(function, shape[0])
-    nn = NeuralNetworkCortex(shape, training_function: function)
+    nn = NeuralNetworkCortex(shape)
     nn.train(train_input, train_output, epochs=5)
     nn.test(test_input, test_output)
     # prediction_data = [0,1,1]

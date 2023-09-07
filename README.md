@@ -1,14 +1,38 @@
+# Cortex Groove
 
-Changelog :
-    CortexGroove est (dans un premier temps) une librairie.
-    C'est à dire que les utilisateurs ont des réseaux de neurones, ici appelé UserNeuralNetwork qui représente n'importe quel réseaux - donc la lib que l'utilisateur préfère etc...
-    Ces utilisateurs implémentent sur leur classe une interface INeuralNetwork qui sera appelé par l'Engine.
-    L'Engine est le coeur du framework, c'est via cette objet que l'on va paramétrer nos différents réseaux neuroneaux.
+## Changelog
+CortexGroove est (dans un premier temps) une librairie.
+C'est à dire que les utilisateurs ont des réseaux de neurones, ici appelé UserNeuralNetwork qui représente n'importe quel réseaux - donc la lib que l'utilisateur préfère etc...
+Ces utilisateurs implémentent sur leur classe une interface INeuralNetwork qui sera appelé par l'Engine.
+L'Engine est le coeur du framework, c'est via cette objet que l'on va paramétrer nos différents réseaux neuroneaux.
 
-    L'Engine et l'interface sont dans le dossier src/main_lib
-    Et un exemple de NN implémenté à l'engine se trouve dans src/main_test.py
+L'Engine et l'interface sont dans le dossier src/main_lib
+Et un exemple de NN implémenté à l'engine se trouve dans src/main_test.py
 
-Exemple d'utilisation de la librairie : 
+## Organisation générale
+Le projet Cortex Groove est constitué de plusieurs modules :
+ - Librairie :
+    Il y a en premier lieu une librairie python qui permet de faire fonctionner les différents réseaux de neurones ensembles.
+ - Service API :
+    Un service permettant d'intéragir avec Cortex Groove via API REST est disponible. Il s'agit d'un projet Django, 
+    permettant notamment d'avoir une mémoire des différents réseaux et leurs configurations.
+ - Website :
+    Une interface web interactive permettra de configurer, entrainer et faire des prédictions avec de plusieurs réseaux de neurones.
+
+## Reflexions sur les objectifs
+
+### Lot 1
+
+ - L'objectif est dans un premier temps de faire une librairie python, ou l'utilisateur doit déclarer ses réseaux.
+ - La librairie permet simplement de faire le lien entre les réseaux et ne permet pas d'entrainer les réseaux.
+
+### Lot 2
+
+ - Pouvoir entrainer dynamique des réseaux permettra d'optimiser en temps réels les réseaux, et tester de manière dynamique plusieurs configurations.
+ - Intégrer un site web avec Nuxt / Tailwind et une interface API REST via Django.
+
+# Librairie Python
+Exemple d'utilisation de la librairie 
 ```python
 from CortexGroove import INeuralNetwork, Engine
 
@@ -66,13 +90,16 @@ result = engine.run(test_data)
 print(f"Result : {result}, expected result : {expected_result}")
 ```
 
+Voici donc l'exemple illustré du code ci-dessus :
+![SVG Image](./documentation/Example_Diagram.svg)
 
-docker image :
-tensorflow/tensorflow
+Avec les données :
+![SVG Image](./documentation/Example_Diagram_withData.svg)
 
-docker pull tensorflow/tensorflow
+# Description technique
 
-Accroche :
+Vous trouverez tous les détails techniques dans le [fichier de description](./documentation/Description%20technique.md)
+# Accroche
 
 CortexGroove, le gestionnaire de réseaux de neurones qui vous fait danser au rythme des synapses !
 
