@@ -91,14 +91,10 @@ print(f"Result : {result}, expected result : {expected_result}")
 ```
 
 Voici donc l'exemple illustré du code ci-dessus :
-<div style="background-color: white;"> 
-    ![SVG Image](./documentation/Example_Diagram.svg)
-</div>
+![SVG Image](./documentation/Example_Diagram.svg)
 
 Avec les données :
-<div style="background-color: white;">
-    ![SVG Image](./documentation/Example_Diagram_withData.svg)
-</div>
+![SVG Image](./documentation/Example_Diagram_withData.svg)
 
 # Description technique
 
