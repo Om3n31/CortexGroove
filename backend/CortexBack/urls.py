@@ -64,14 +64,7 @@ for model in apps.get_models():
     for attr in dir(model):
         func = getattr(model, attr)
         if hasattr(func, 'api_action'):
-            # Function factory to create a function with a specific name
-            def create_action_func(name):
-                def action_func(self, request):
-                    return Response({})
-                action_func.__name__ = name
-                return action_func
-
-            action_func = create_action_func(func.api_action['name'])
+            
             action_decorator = action(detail=True, methods=[func.api_action['method']])
             decorated_func = action_decorator(func)
 
