@@ -37,6 +37,12 @@ def handle_custom_action(self, request, pk=None, model=None, action_func=None):
     result = action_func(instance)
     return Response({'result': result})
 
+def dynamic_view(request, model_name, action_name):
+    """Dynamically create a view for the given model and action."""
+    model = getattr(models, model_name)
+    action = getattr(model, action_name)
+
+    return action(request)
 
 for model in apps.get_models():
     model_name = model.__name__
@@ -60,16 +66,18 @@ for model in apps.get_models():
         if hasattr(func, 'api_action'):
             # Function factory to create a function with a specific name
             def create_action_func(name):
-                def action_func(self, request, pk=None):
+                def action_func(self, request):
                     return Response({})
                 action_func.__name__ = name
                 return action_func
 
             action_func = create_action_func(func.api_action['name'])
             action_decorator = action(detail=True, methods=[func.api_action['method']])
-            decorated_func = action_decorator(action_func)
+            decorated_func = action_decorator(func)
 
+            # setattr(viewset, func.api_action['name'], test)
             setattr(viewset, func.api_action['name'], decorated_func)
+            # viewset.do_action("test")
 
     router.register(rf'{model_name.lower()}', viewset)
 
