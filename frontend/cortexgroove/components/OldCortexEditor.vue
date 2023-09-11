@@ -1,5 +1,4 @@
 <template>
-
     <button @click="addLayer()" class="bg-slate-800 hover:bg-slate-700 text-white py-1 px-2 rounded-lg w-max border-2 border-cortex-light-green cursor-pointer mt-6">+ Layer</button>
     <div class="p-2 border-2 border-cortex-green rounded-lg my-1 flex gap-2 border-dashed">
         <div class="w-2/12 cursor-pointer border-2 border-cortex-light-green p-2 rounded-lg" v-for="layer in cortex.metadata.layers">
@@ -54,6 +53,8 @@
 		showPopup.value = false;
 	}
 
+
+
     /*
 	let cortexes = ref([
 		{
@@ -75,6 +76,6 @@
 			]
 		},
 	]);
-    */
 
+    */
 </script>

@@ -3,7 +3,7 @@
 		<div class="bg-slate-800 rounded-lg p-8 shadow-lg z-100 w-6/12 border-2 border-cortex-light-green">
 
 			<div @click="$emit('close')" class="cursor-pointer">
-				<div @click="$emit('close')" class="cursor-pointer w-[3vw] h-[3vw] bg-violet-500" style="-webkit-clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%); clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);">		
+				<div @click="$emit('close')" class="cursor-pointer w-[3vw] h-[3vw] bg-cortex-light-green" style="-webkit-clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%); clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);">		
 				</div>
 			</div>
 
