@@ -38,9 +38,9 @@ def api_action(name, method):
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
 
-    @api_action('action_name', 'POST')
-    def do_action(self, request):
+    @api_action('do_action', 'POST')
+    def do_action(self, request, pk=None):
         print("test")
         # workspace = Workspace.objects.first() # Change this line to get the correct Workspace instance
         # workspace.doAction()
-        # return Response({"status": "success"}, status=status.HTTP_200_OK)
+        return Response({"status": "success"}, status=status.HTTP_200_OK)
