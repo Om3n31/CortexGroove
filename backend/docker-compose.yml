@@ -1,14 +1,15 @@
 version: "3.9"
 services:
   tf-container:
-    build: .
+    image: om3n31/cortexgroove:backend
     volumes:
       - ../backend/:/backend
-    networks:
-        cortexgroove-storage:
-          ipv4_address: 172.16.238.4
+    # networks:
+    #     cortexgroove-storage:
+    #       ipv4_address: 172.16.238.4
     ports:
       - 8000:8000
+    command: python /backend/manage.py runserver 0.0.0.0:8000
   # db:
   #   image: esolang/sqlite3:latest
   #   volumes:
@@ -47,9 +48,9 @@ services:
   #     PGADMIN_DEFAULT_PASSWORD: temp_dev_password
   #   volumes:
   #     - ./pgadmin:/var/lib/pgadmin
-networks:
-  cortexgroove-storage:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.238.0/24
+# networks:
+#   cortexgroove-storage:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 172.16.238.0/24
