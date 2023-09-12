@@ -25,6 +25,15 @@ class Cortex(models.Model):
     metadata = models.TextField()  # string
     layers = models.ManyToManyField(Layer)  # List of Layer
 
+class TFLayerTypeOption(models.Model):
+    name = models.TextField()
+    type = models.TextField()
+    possible_values = models.JSONField()
+
+class TFLayerType(models.Model):
+    name = models.TextField() 
+    options = models.ManyToManyField(TFLayerTypeOption) 
+    
 # @functools.wraps
 def api_action(name, method):
     def wrapper(func):
