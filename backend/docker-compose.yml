@@ -3,36 +3,54 @@ services:
   tf-container:
     build: .
     volumes:
-      - ./framework_source:/framework_source
-  storage:
-    image: postgres:latest
-    networks:
-      cortexgroove-storage:
-        ipv4_address: 172.16.238.2
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: temp_dev_password
+      - ../backend/:/backend
+    # networks:
+    #     cortexgroove-storage:
+    #       ipv4_address: 172.16.238.4
     ports:
-      - 5432:5432
-    volumes:
-      - ./data:/var/lib/postgresql/data
-  storage-client:
-    image: dpage/pgadmin4:latest
-    networks:
-      cortexgroove-storage:
-        ipv4_address: 172.16.238.3
-    depends_on:
-      - db
-    ports:
-      - 15432:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: temp_dev_password
-    volumes:
-      - ./pgadmin:/var/lib/pgadmin
-networks:
-  cortexgroove-storage:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.238.0/24
+      - 8000:8000
+    command: python /backend/manage.py runserver 0.0.0.0:8000
+  # db:
+  #   image: esolang/sqlite3:latest
+  #   volumes:
+  #     - ./db-data:/var/lib/sqlite3
+  #   networks:
+  #     cortexgroove-storage:
+  #       ipv4_address: 172.16.238.2
+  #   environment:
+  #     - SQLITE_USER=admin
+  #     - SQLITE_PASSWORD=password
+  #     - SQLITE_PORT=54321
+  #   ports:
+  #     - 54321:54321
+  # storage:
+  #   image: postgres:latest
+  #   networks:
+  #     cortexgroove-storage:
+  #       ipv4_address: 172.16.238.2
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: temp_dev_password
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - ./data:/var/lib/postgresql/data
+  # storage-client:
+  #   image: dpage/pgadmin4:latest
+  #   user: "0"
+  #   networks:
+  #     cortexgroove-storage:
+  #       ipv4_address: 172.16.238.3
+  #   ports:
+  #     - 15432:80
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: temp_dev_password
+  #   volumes:
+  #     - ./pgadmin:/var/lib/pgadmin
+# networks:
+#   cortexgroove-storage:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 172.16.238.0/24

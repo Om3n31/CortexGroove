@@ -1,18 +1,33 @@
 
 # Local creation
 
+from main_lib.iNeuralNetwork import Position
 from main_lib.INeuralNetwork import INeuralNetwork
 from main_lib.tools import *
 
 class Engine:
 
-    def __init__(self, NNetMatrix) -> None:
+    def __init__(self, NeuralNetList) -> None:
+        self.neuralNetList = NeuralNetList
         self.layers = []
         for nnLayer in NNetMatrix:
             self.layers.append(Layer(nnLayer))
 
+    def set_layer(self, neural_net, layer_index):
+        if self.layers[layer_index] != None:
+            self.layers.append(Layer([neural_net]))
+        else :
+            self.layers[layer_index].NNList.append(neural_net)
+
     def run(self, inputData):
         data = inputData
+        output_data = []
+        first_nn = [i for i in self.neuralNetList if i.position is Position.FIRST]
+        
+        for index, nn in enumerate(first_nn):
+            nn.predict(data[index])
+            output_data.append(nn.output)
+
         for layer in self.layers:
             layer.run(data)
             data = layer.output
