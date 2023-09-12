@@ -19,8 +19,6 @@
 
     import { ref } from 'vue';
 
-    let showPopup = ref(false);
-    let layerToEdit = ref('');
     let network = ref(
         {
             name: String,
@@ -35,11 +33,26 @@
     function removeLayer(index: number): void {
         network.value.layers.splice(index, 1);
     }
-    function addNetwork(layerName: string): void {
-        showPopup.value = true;
-        layerToEdit.value = layerName;
-    }
 
+
+    let layerTypes = [ //call to db
+        { id: 0, name: 'Dense'},
+        { id: 1, name: 'Convolutionnal 2D'},
+        { id: 2, name: 'Simple RNN'},
+        { id: 3, name: 'LSTM'},
+        { id: 4, name: 'GRU'},
+
+        { id: 5, name: 'Max Pooling 2D'},
+        { id: 6, name: 'Average Pooling 2D'},
+        { id: 7, name: 'Dense'},
+        { id: 8, name: 'Dense'},
+        { id: 9, name: 'Dense'},
+        { id: 10, name: 'Dense'},
+        { id: 11, name: 'Dense'},
+        { id: 12, name: 'Dense'},
+        { id: 13, name: 'Dense'},
+        { id: 14, name: 'Dense'}
+    ]
     /*
 	let cortexes = ref([
 		{
