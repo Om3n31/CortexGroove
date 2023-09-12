@@ -36,22 +36,42 @@
 
 
     let layerTypes = [ //call to db
-        { id: 0, name: 'Dense'},
+        
+        { 
+            id: 0, 
+            name: 'Dense', 
+            options: [ 
+                { name: 'option name string', type: 'String', possibleValues: ['option 1', 'option 2', 'option 3'] },
+                { name: 'option name integer', type: 'Integer', possibleValues: null }
+            ] 
+        },
+
         { id: 1, name: 'Convolutionnal 2D'},
+
         { id: 2, name: 'Simple RNN'},
         { id: 3, name: 'LSTM'},
         { id: 4, name: 'GRU'},
 
         { id: 5, name: 'Max Pooling 2D'},
         { id: 6, name: 'Average Pooling 2D'},
-        { id: 7, name: 'Dense'},
-        { id: 8, name: 'Dense'},
-        { id: 9, name: 'Dense'},
-        { id: 10, name: 'Dense'},
-        { id: 11, name: 'Dense'},
-        { id: 12, name: 'Dense'},
-        { id: 13, name: 'Dense'},
-        { id: 14, name: 'Dense'}
+
+        { id: 7, name: 'Dropout'},
+
+        { id: 8, name: 'Batch Normalisation'},
+
+        { id: 9, name: 'Activation'},
+
+        { id: 10, name: 'Flatten'},
+
+        { id: 11, name: 'Concatenate'},
+
+        { id: 12, name: 'Embedding'},
+
+        { id: 13, name: 'Global Max Pooling 2D'},
+        { id: 14, name: 'Global Average Pooling 2D'},
+
+        { id: 15, name: 'Residual'},
+        { id: 16, name: 'Add'},
     ]
     /*
 	let cortexes = ref([
