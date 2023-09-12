@@ -32,7 +32,7 @@ class TFLayerTypeOption(models.Model):
 
 class TFLayerType(models.Model):
     name = models.TextField() 
-    options = models.ManyToManyField(TFLayerTypeOption) 
+    options = models.ManyToManyField(TFLayerTypeOption, blank=True) 
     
 # @functools.wraps
 def api_action(name, method):
