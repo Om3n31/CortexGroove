@@ -4,7 +4,7 @@
 			<!-- Add your content for the popup card here -->
 			<slot>
 				<div class="w-full">
-					<input type="text" v-model="layerName" placeholder="New layer" class=" break-all break-words w-full text-3xl bg-slate-700 text-center font-bold"/>
+					<input type="text" v-model="layerName" placeholder="Existing layer" class=" break-all break-words w-full text-3xl bg-slate-700 text-center font-bold"/>
 					<div class="flex items-start justify-start w-full h-full p-4">
 						<div class="relative w-full mt-4">
 
@@ -45,7 +45,7 @@
 					Cancel
 				</button>
 				<button @click="addLayer" class="border-2 border-cortex-light-green mt-4 px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-cortex-light-green hover:bg-opacity-30">
-					Add
+					Update
 				</button>
 			</div>
 		</div>
@@ -58,7 +58,15 @@
 		network: {
 			type: Object as () => Network, 
 			required: true
+		},
+		layerToEdit: {
+			type: Object as () => Layer,
+			required: true
 		}
+	});
+
+	watch(() => props.layerToEdit, (newLayer, oldLayer) => {
+		updateLayerToEdit();
 	});
 
 	const emit = defineEmits(['addLayer', 'close']);
@@ -66,9 +74,9 @@
 	let layerTypes = ref(await useFetch<LayerType[]>('http://localhost:8000/tflayertype/?format=json').data.value);
     let layerTypeOptions = ref(await useFetch<LayerOption[]>('http://localhost:8000/tflayertypeoption/?format=json').data.value);
 
-	let layerName = ref<string>('');
-	let selectedLayerType = ref<LayerType>();
-	let	selectedLayerTypeOptions = ref<{ option: LayerOption, value: string|number|undefined }[]>([]);
+	let layerName = ref<string>(props.layerToEdit.name);
+	let selectedLayerType = ref<LayerType | undefined>(props.layerToEdit.type);
+	let	selectedLayerTypeOptions = ref<{ option: LayerOption, value: string|number|undefined }[]>(props.layerToEdit.options);
 
 	function displayOptions() {
 
@@ -81,23 +89,13 @@
 
 		for(let option of optionList)
 			selectedLayerTypeOptions.value.push({ option: option, value: undefined});
+
+			console.log(props.layerToEdit, props.network);
 	}
 
 	function addLayer() {
-
-		let illegalName: boolean = false;
-
-		for(let layer of props.network.layers) {
-			if(layer.name == layerName.value) {
-				alert('The name of the layer must be unique. Please check the layer\'s name and try again');
-				illegalName = true;
-			}
-		}
-			
-		if(!illegalName) {
-			emit('addLayer', layerName.value, selectedLayerType.value, selectedLayerTypeOptions.value);
-			closePopup();
-		}
+		emit('addLayer', layerName.value, selectedLayerType.value, selectedLayerTypeOptions.value);
+		closePopup();
 	}
 
 	function closePopup() {
@@ -107,7 +105,13 @@
 		emit('close');
 	}
 
-    interface Network {
+	function updateLayerToEdit() {
+		layerName.value = props.layerToEdit.name;
+		selectedLayerType.value = props.layerToEdit.type;
+		selectedLayerTypeOptions.value = props.layerToEdit.options;
+	}
+
+	interface Network {
         name: string,
         layers: Layer[]
         
