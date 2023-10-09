@@ -12,7 +12,8 @@
     <div class="p-2 border-2 border-cortex-green rounded-lg my-2 flex gap-2 border-dashed overflow-x-scroll">
         <div class="w-2/12 border-2 border-cortex-light-green rounded-lg flex" v-for="(layer, index) in network.layers" :key="layer.name">
 
-            <div class="border w-1/12 bg-cortex-light-green">
+            <div @click="makeLayerGoLeft(layer, index)" class="flex items-center rounded-l-lg border-r-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30">
+                <img src="../assets/images/arrow-left.png"/>
             </div>
 
             <div class="w-10/12 p-2">
@@ -31,8 +32,8 @@
                 </div>
             </div>
 
-            <div class="border w-1/12">
-                >
+            <div @click="makeLayerGoRight(layer, index)" class="flex items-center rounded-r-lg border-l-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30">
+                <img src="../assets/images/arrow-right.png"/>
             </div>
 
         </div>
@@ -55,7 +56,6 @@
         options: []
     }
     let layerToEdit = ref<Layer>(defaultLayer);
-
 
     let networkName = ref<string>('');
     let network = ref<Network>({name: '', layers: []});
@@ -109,6 +109,26 @@
 
     function createNetwork() {
         //call to back to create network
+    }
+
+    function makeLayerGoLeft(layer: Layer, index: number)  {
+
+        if(index == 0)
+            return;
+
+        let layerToMove = network.value.layers[index];
+        network.value.layers[index] = network.value.layers[index-1];
+        network.value.layers[index-1] = layerToMove;
+    }
+
+    function makeLayerGoRight(layer: Layer, index: number)  {
+            
+        if(index == network.value.layers.length-1)
+            return;
+
+        let layerToMove = network.value.layers[index];
+        network.value.layers[index] = network.value.layers[index+1];
+        network.value.layers[index+1] = layerToMove;
     }
 
     interface Network {

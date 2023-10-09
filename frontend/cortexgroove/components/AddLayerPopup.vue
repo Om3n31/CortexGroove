@@ -85,19 +85,15 @@
 
 	function addLayer() {
 
-		let illegalName: boolean = false;
-
 		for(let layer of props.network.layers) {
 			if(layer.name == layerName.value) {
 				alert('The name of the layer must be unique. Please check the layer\'s name and try again');
-				illegalName = true;
+				return;
 			}
 		}
 			
-		if(!illegalName) {
-			emit('addLayer', layerName.value, selectedLayerType.value, selectedLayerTypeOptions.value);
-			closePopup();
-		}
+		emit('addLayer', layerName.value, selectedLayerType.value, selectedLayerTypeOptions.value);
+		closePopup();
 	}
 
 	function closePopup() {

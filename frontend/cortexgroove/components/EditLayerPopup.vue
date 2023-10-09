@@ -65,19 +65,26 @@
 		}
 	});
 
-	let oldLayerName = ref<string>(props.layerToEdit.name);
-	let layerName = ref<string>(props.layerToEdit.name);
-	let selectedLayerType = ref<LayerType | undefined>(props.layerToEdit.type);
-	let	selectedLayerTypeOptions = ref<{ option: LayerOption, value: string|number|undefined }[]>(props.layerToEdit.options);
-
-	watch(() => props.layerToEdit, (newLayer, oldLayer) => {
-		updateLayerToEdit();
-	}, { immediate: true });
-
 	const emit = defineEmits(['editLayer', 'close']);
+
+	let layerName = ref<string>('');
+	let oldLayerName = ref<string>('');
+	let selectedLayerType = ref<LayerType | undefined>(undefined);
+	let selectedLayerTypeOptions = ref<{ option: LayerOption, value: string | number | undefined }[]>([]);
 
 	let layerTypes = ref(await useFetch<LayerType[]>('http://localhost:8000/tflayertype/?format=json').data.value);
     let layerTypeOptions = ref(await useFetch<LayerOption[]>('http://localhost:8000/tflayertypeoption/?format=json').data.value);
+
+	watch(() => props.layerToEdit, () => {
+		updateLayerToEdit();
+	}, { immediate: true });
+
+	function updateLayerToEdit() {
+		oldLayerName.value = props.layerToEdit.name;
+		layerName.value = props.layerToEdit.name;
+		selectedLayerType.value = props.layerToEdit.type;
+		selectedLayerTypeOptions.value = props.layerToEdit.options;
+	}
 
 	function displayOptions() {
 
@@ -90,23 +97,24 @@
 
 		for(let option of optionList)
 			selectedLayerTypeOptions.value.push({ option: option, value: undefined});
+
 	}
 
 	function editLayer() {
+
+		for(let layer of props.network.layers) {
+			if(layer.name == layerName.value && layer.name != oldLayerName.value) {
+				alert('The name of the layer must be unique. Please check the layer\'s name and try again');
+				return;
+			}
+		}
+			
 		emit('editLayer', oldLayerName.value, layerName.value, selectedLayerType.value, selectedLayerTypeOptions.value);
 		closePopup();
 	}
 
 	function closePopup() {
 		emit('close');
-	}
-
-	function updateLayerToEdit() {
-		console.log(props.layerToEdit);
-		oldLayerName.value = props.layerToEdit.name;
-		layerName.value = props.layerToEdit.name;
-		selectedLayerType.value = props.layerToEdit.type;
-		selectedLayerTypeOptions.value = props.layerToEdit.options;
 	}
 
 	interface Network {
