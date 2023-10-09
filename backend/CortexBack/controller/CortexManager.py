@@ -1,3 +1,4 @@
+# from utils.SingletonMeta import SingletonMeta
 from CortexBack.utils.SingletonMeta import SingletonMeta
 from main_lib.Engine import Engine
 from main_lib.iNeuralNetwork import INeuralNetwork, Position

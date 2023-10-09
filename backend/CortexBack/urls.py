@@ -20,7 +20,6 @@ from django.urls import path, include
 from rest_framework.authtoken import views as auth_views
 from rest_framework.routers import DefaultRouter
 from rest_framework import serializers, viewsets
-from . import models
 from rest_framework.response import Response
 from rest_framework.views import status
 from rest_framework.decorators import action
@@ -28,7 +27,6 @@ from rest_framework.response import Response
 from functools import partial
 
 router = DefaultRouter()
-
 
 
 for model in apps.get_models():

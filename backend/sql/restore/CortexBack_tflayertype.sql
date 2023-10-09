@@ -1,0 +1,13 @@
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (2, 'Dense');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (3, 'Convolutionnal 2D');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (4, 'Simple RNN');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (5, 'LSTM');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (6, 'GRU');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (7, 'Max pooling 2D');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (8, 'Average pooling 2D');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (9, 'Dropout');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (10, 'Batch normalisation');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (11, 'Activation');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (12, 'Flatten');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (13, 'Global max pooling 2D');
+INSERT INTO CortexBack_tflayertype (id, name) VALUES (14, 'Global average pooling 2D');

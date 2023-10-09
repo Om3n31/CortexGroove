@@ -1,5 +1,5 @@
 from typing import Any
-from CortexBack.controller.CortexManager import CortexManager
+from .controller.CortexManager import CortexManager
 from django.db import models
 from main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
@@ -8,7 +8,7 @@ from rest_framework import status
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from CortexBack.utils.tools import api_action
+from .utils.tools import api_action
 
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
