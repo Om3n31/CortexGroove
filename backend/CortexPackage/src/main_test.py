@@ -1,9 +1,6 @@
-import random
-
 import numpy as np
-from numpy import array
 
-from main_lib.Engine import Engine
+from main_lib import Engine
 from NeuralNetworkCortex import NeuralNetworkCortex
 
 def functionNN1(input_data):
@@ -38,8 +35,8 @@ for index, function in enumerate(math_functions):
     shape = shapes[index] # It means that the model will take a list of 3 element in input and will output one element
     train_input, train_output, test_input, test_output = createSet(function, shape[0])
     nn = NeuralNetworkCortex(shape)
-    nn.train(train_input, train_output, epochs=5)
-    nn.test(test_input, test_output)
+    # nn.train(train_input, train_output, epochs=5)
+    # nn.test(test_input, test_output)
     # prediction_data = [0,1,1]
     # print(f"Result of {prediction_data} is {nn.predict([prediction_data])}")
     nn_list.append(nn)
