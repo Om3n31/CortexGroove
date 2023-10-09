@@ -20,7 +20,7 @@ class NeuralNetwork(models.Model):
 class Cortex(models.Model):
     metadata = models.TextField()  # string
     
-class NeuralNetworkConfig(models.Model):
+class NeuralNetworkConfig(models.Model, INeuralNetwork):
     neural_network = models.OneToOneField(NeuralNetwork, null=True, on_delete=models.CASCADE)  # N:1
     next_NN = models.ManyToManyField('self', blank=True)  # N:N
     previous_NN = models.ManyToManyField('self', blank=True)  # N:N
@@ -29,6 +29,11 @@ class NeuralNetworkConfig(models.Model):
 
     # def __init__(self, *args: Any, **kwargs: Any) -> None:
     #     super().__init__(*args, **kwargs)
+    
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.__init__ = lambda self: None
 
 
 # @functools.wraps
