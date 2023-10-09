@@ -28,7 +28,7 @@
                 </div>
                 <div v-for="option in layer.options" class="mb-2 flex justify-between border-b border-dashed border-opacity-50  ">
                     <div class="text-sm font-mono text-cortex-dark-green">{{ option.option.name }}</div>
-                    <div class="text-sm font-mono text-cortex-dark-green">{{ option.value }}</div>
+                    <div class="text-sm font-mono text-cortex-dark-green">{{ option.optionValue }}</div>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
     let networkName = ref<string>('');
     let network = ref<Network>({name: '', layers: []});
 
-    function addLayer(name: string, type: LayerType, options: { option: LayerOption, value: string|number|undefined }[]): void {
+    function addLayer(name: string, type: LayerType, options: { option: LayerOption, optionValue: string|number|undefined }[]): void {
         
         let nameClone = name.slice();
         let typeClone = { ...type };
@@ -69,17 +69,15 @@
         network.value.layers.push({ name: nameClone, type: typeClone, options: optionsClone});
     }
 
-    function editLayer(oldLayerName: string, layerName: string, selectedLayerType: LayerType, selectedLayerTypeOptions: { option: LayerOption, value: string|number|undefined }[]) {
+    function editLayer(oldLayerName: string, layerName: string, selectedLayerType: LayerType, selectedLayerTypeOptions: { option: LayerOption, optionValue: string|number|undefined }[]) {
 
         let layerToModify = network.value.layers.find(layer => layer.name == oldLayerName);
+        
         if (layerToModify) {    
-            console.log('modification du layer...');
             layerToModify.name = layerName;
             layerToModify.type = selectedLayerType;
             layerToModify.options = selectedLayerTypeOptions;
         }
-        else 
-            console.log('layer non trouvé');
 
         layerToEdit.value = defaultLayer;
     }
@@ -141,7 +139,7 @@
         type: LayerType,
         options: {
             option: LayerOption,
-            value: string|number|undefined 
+            optionValue: string|number|undefined 
         }[]
     }
 

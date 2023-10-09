@@ -18,19 +18,19 @@
 
 									<div class="pt-4" v-if="option.option.possible_values.length && (option.option.type == 'boolean' || option.option.type == 'string')">
 										<label :for="option.option.id.toString()" class="block font-medium dark:text-white mb-2">{{ option.option.name }}</label>
-										<select v-model="option.value" :id="option.option.id.toString()" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
+										<select v-model="option.optionValue" :id="option.option.id.toString()" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white">
 											<option v-for="value in option.option.possible_values" :value=value>{{ value }}</option>
 										</select>
 									</div>
 
 									<div class="pt-4" v-if="!option.option.possible_values.length && option.option.type == 'integer'">
 										<label :for="option.option.id.toString()" class="block font-medium dark:text-white mb-2">{{ option.option.name }}</label>
-										<input v-model="option.value" type="number" :id="option.option.id.toString()" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"/>
+										<input v-model="option.optionValue" type="number" :id="option.option.id.toString()" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"/>
 									</div>
 
 									<div class="pt-4" v-if="option.option.type == 'float'">
 										<label :for="option.option.id.toString()" class="block font-medium dark:text-white mb-2">{{ option.option.name }}</label>
-										<input v-model="option.value" type="number" :id="option.option.id.toString()" min="0" max="1" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"/>
+										<input v-model="option.optionValue" type="number" :id="option.option.id.toString()" min="0" max="1" class="appearance-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"/>
 									</div>
 
 								</div>
@@ -70,7 +70,7 @@
 	let layerName = ref<string>('');
 	let oldLayerName = ref<string>('');
 	let selectedLayerType = ref<LayerType | undefined>(undefined);
-	let selectedLayerTypeOptions = ref<{ option: LayerOption, value: string | number | undefined }[]>([]);
+	let selectedLayerTypeOptions = ref<{ option: LayerOption, optionValue: string | number | undefined }[]>([]);
 
 	let layerTypes = ref(await useFetch<LayerType[]>('http://localhost:8000/tflayertype/?format=json').data.value);
     let layerTypeOptions = ref(await useFetch<LayerOption[]>('http://localhost:8000/tflayertypeoption/?format=json').data.value);
@@ -93,11 +93,12 @@
 		if(!optionList)
 			return;
 
+		selectedLayerTypeOptions.value = Object.values(selectedLayerTypeOptions.value);
+
 		selectedLayerTypeOptions.value.splice(0, selectedLayerTypeOptions.value.length);
 
 		for(let option of optionList)
-			selectedLayerTypeOptions.value.push({ option: option, value: undefined});
-
+			selectedLayerTypeOptions.value.push({ option: option, optionValue: undefined});
 	}
 
 	function editLayer() {
@@ -127,7 +128,7 @@
         type: LayerType,
         options: {
             option: LayerOption,
-            value: string|number|undefined 
+            optionValue: string|number|undefined 
         }[]
     }
 
