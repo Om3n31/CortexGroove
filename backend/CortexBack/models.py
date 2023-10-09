@@ -1,11 +1,11 @@
 from typing import Any
 from .controller.CortexManager import CortexManager
 from django.db import models
-from main_lib.iNeuralNetwork import INeuralNetwork, Position
+from CortexPackage.src.main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+ 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .utils.tools import api_action

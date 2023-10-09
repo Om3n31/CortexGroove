@@ -1,7 +1,6 @@
 # from utils.SingletonMeta import SingletonMeta
 from CortexBack.utils.SingletonMeta import SingletonMeta
-from main_lib.Engine import Engine
-from main_lib.iNeuralNetwork import INeuralNetwork, Position
+from CortexPackage.src.main_lib import Engine
 
 
 class CortexManager(metaclass=SingletonMeta):
@@ -13,7 +12,7 @@ class CortexManager(metaclass=SingletonMeta):
         # engine = Engine(NNetMatrix)
         # result = engine.run([[1,2,3], [4,5,6,7]])
         # print(result)
-
+ 
     def start(self, data):
         self.engine = Engine(self.neural_net_matrix)
         result = self.engine.run(data)
