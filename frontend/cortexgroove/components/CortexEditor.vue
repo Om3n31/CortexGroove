@@ -1,122 +1,66 @@
 <template>
+
     <div>
-      <canvas id="canvas" ref="canvas" class="border-2 border-white rounded-lg w-full"></canvas>
+        <button @click="addNetwork">Add network</button>
     </div>
-  </template>
-  
-<script lang="ts">
 
-  import * as paper from "paper";
-import { Size } from "paper/dist/paper-core";
+    <div>
+      <canvas id="canvas" class="border-2 border-white rounded-lg w-full"></canvas>
+    </div>
 
-  export default {
-    mounted() {
-      // Initialize Paper.js
-      paper.setup(document.getElementById('canvas') as HTMLCanvasElement);
+</template>
   
-      var initialWidth = 100;
-      var initialHeight = 50;
-      var maxWidth = 300; // Maximum width for the rectangle
-      var maxHeight = 150; // Maximum height for the rectangle
-      var textContent = 'This is a long text that should wrap if it exceeds the width and get truncated if it exceeds both width and height';
+<script setup lang="ts">
 
-      var rectangle1 = new paper.Rectangle(new paper.Point(100, 100), new paper.Size(initialWidth, initialHeight));
-      var path1 = new paper.Path.Rectangle(rectangle1, new paper.Size(10, 10));
-      path1.style = new paper.Style({
-        fillColor: new paper.Color('#525b76'),
-        strokeColor: new paper.Color('#c4f1be'),
-        strokeWidth: 2
-      });
+    import {GraphicalNeuralNetwork} from "../classes/GraphicalNeuralNetwork"
+    import {Canvas} from "../classes/Canvas"
+    import * as paper from "paper";
 
-      // Create a PointText item and set its content and position
-      var text = new paper.PointText({
-        content: textContent,//'Vehicle recognition network', // Replace with your desired text
-        fillColor: 'white',     // Set the text color
-        fontFamily: 'Arial',    // Set the font family
-        fontSize: 14,            // Set the font size
-        point: path1.position    // Position the text at the center of the rectangle
-      });
+    const neuralNetworks: GraphicalNeuralNetwork[] = [];
+    const canvas = new Canvas(neuralNetworks);
 
-      text.position = path1.bounds.center;
-      updateRectangleSize(text, rectangle1, path1);
+    const addNetwork = () => {
+        canvas.graphicalNeuralNetworks.push(new GraphicalNeuralNetwork(1, 50, 50, 100, 100, '#525B76', 'Network 1', false, false, canvas));
+        console.log("Adding a network");
+    };
 
-      var rectangle2 = new paper.Rectangle(new paper.Point(300, 300), new paper.Size(100, 50));
-      var path2 = new paper.Path.Rectangle(rectangle2);
-      path2.fillColor = new paper.Color('blue');
-  
-      // Initialize variables to track segment and mouse position
-      var segment: paper.Path.Line | null;
-      var mousePoint = new paper.Point(0, 0);
-      var isDragging = false;
-  
-      // Event handler for mouse down on rectangles
-      path1.onMouseDown = path2.onMouseDown = function (event: any) {
-        isDragging = true;
-      };
-  
-      // Event handler for mouse up
-      paper.view.onMouseUp = function (event: any) {
-        isDragging = false;
-        if (segment) {
-          segment.remove();
-          segment = null;
-        }
-      };
-  
-      // Event handler for mouse move
-      paper.view.onMouseMove = function (event: any) {
+    onMounted(() => {
+        
+        paper.setup(document.getElementById('canvas') as HTMLCanvasElement);
+
+        //TODO : display existing neural networks
+
+        let rectangle1 = new GraphicalNeuralNetwork(1, 50, 50, 100, 100, '#525B76', 'Network 1', false, false, canvas);
+
+        let rectangle2 = new GraphicalNeuralNetwork(2, 200, 50, 100, 100, '#525B76', 'Network 2', false, false, canvas);
+        
+        canvas.graphicalNeuralNetworks.push(rectangle1);
+        canvas.graphicalNeuralNetworks.push(rectangle2);
+
+        // TODO create neural networks from scratch
+
+        // Initialize variables to track segment and mouse position
+        var mousePoint: paper.Point = new paper.Point(0, 0);
+        var isDrawing: boolean = false;
+        var isDragging: boolean = false;
+        
+        // Event handler for mouse down in the void
+
+        paper.view.onClick = function (event: any) {
+            if (isDrawing) {
+                //Gérer les événements de click
+                isDrawing = false;
+            };
+        };
+
+        // Event handler for mouse move
+
+        paper.view.onMouseMove = function (event: any) {
         mousePoint = event.point;
-      };
-  
-      // Main update function
-      paper.view.onFrame = function (event: any) {
-        if (isDragging) {
-          if (segment) {
-            segment.remove();
-            segment = null;
-          }
-          segment = new paper.Path.Line(path1.bounds.center, mousePoint);
-          segment.strokeColor = new paper.Color('black');
-        } else {
-          if (segment) {
-            segment.remove();
-            segment = null;
-          }
-        }
-  
-        // Check if the mouse is near the second rectangle
-        if (path2.bounds.contains(mousePoint) && segment) {
-          segment.remove();
-          segment = new paper.Path.Line(path1.bounds.center, path2.bounds.center);
-          segment.strokeColor = new paper.Color('black');
-        }
-      };
-        
-      function updateRectangleSize(text: paper.TextItem, rectangle: paper.Rectangle, rectanglePath: paper.Path) {
-        
-        let style = rectanglePath.style; //save style 
-
-        var textBounds = text.bounds;
-        var newWidth = Math.min(maxWidth, Math.max(initialWidth, textBounds.width + 20)); // Add some padding
-        var newHeight = Math.min(maxHeight, Math.max(initialHeight, textBounds.height + 20)); // Add some padding
-
-        // Truncate text if both width and height limits are reached
-        if (newWidth === maxWidth && newHeight === maxHeight) {
-          var maxLength = Math.floor((maxWidth - 20) / 14); // Adjust this value based on your font size
-          text.content = textContent.substring(0, maxLength) + '...';
-        }
-        console.log(newWidth, newHeight)
-
-        // Update the rectangle's size
-        rectangle = new paper.Rectangle(new paper.Point(100, 100), new paper.Size(newWidth, newHeight));
-        rectanglePath.remove();
-        rectanglePath = new paper.Path.Rectangle(rectangle, new Size(10, 10));
-        rectanglePath.style = style;
-        rectanglePath.sendToBack();
-        // Center the text within the updated rectangle
-        text.position = rectanglePath.bounds.center;
-      }
-    }
-  };
+            if (isDrawing) {
+                //Gérer les mouvements de souris
+            }
+        };
+    });
 </script>
-  
+
