@@ -40,7 +40,7 @@ for model in apps.get_models():
     )
 
     # Get the allowed methods from the model
-    allowed_methods = getattr(model, 'allowed_methods', ['get', 'post', 'head', 'options', 'put', 'patch', 'delete'])
+    allowed_methods = getattr(model, 'allowed_methods', ['get', 'post', 'head', 'put', 'options', 'patch', 'delete'])
 
     viewset = type(
         f'{model_name}ViewSet',

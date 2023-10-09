@@ -1,4 +1,6 @@
 from typing import Any
+from CortexBack.controller.CortexManager import CortexManager
+from CortexBack.utils.SingletonMeta import api_action
 from django.db import models
 from main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
@@ -19,6 +21,16 @@ class NeuralNetwork(models.Model):
 
 class Cortex(models.Model):
     metadata = models.TextField()  # string
+
+    @api_action('predict', 'POST')
+    def predict(self, request, pk=None):
+        print(request.data)
+        CortexManager().neural_net_matrix = list(NeuralNetworkConfig.objects.all())
+        data = CortexManager().start(request.data)
+        print("prediction")
+        # workspace = Workspace.objects.first() # Change this line to get the correct Workspace instance
+        # workspace.doAction()
+        return Response({"status": "success", "data" : str(data)}, status=status.HTTP_200_OK)
     
 class NeuralNetworkConfig(models.Model, INeuralNetwork):
     neural_network = models.OneToOneField(NeuralNetwork, null=True, on_delete=models.CASCADE)  # N:1
@@ -36,15 +48,6 @@ class NeuralNetworkConfig(models.Model, INeuralNetwork):
         cls.__init__ = lambda self: None
 
 
-# @functools.wraps
-def api_action(name, method):
-    def wrapper(func):
-        func.api_action = {
-            'name': name,
-            'method': method
-        }
-        return func
-    return wrapper
 
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
