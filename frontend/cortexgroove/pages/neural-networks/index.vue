@@ -1,3 +1,3 @@
 <template>
-    hello from neural networks
+    <NetworkEditor></NetworkEditor>
 </template>
