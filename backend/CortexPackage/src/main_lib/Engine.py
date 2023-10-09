@@ -23,13 +23,13 @@ class Engine:
     def run(self, inputData):
         data = inputData
         output_data = []
-        first_nn = [i for i in self.neuralNetList if i.position is Position.FIRST]
+        first_nn = [i for i in self.neuralNetList if i.position is Position.FIRST.value]
         
         for index, nn in enumerate(first_nn):
             nn.predict_network(data[index])
             output_data.extend(nn.output)
 
-        return [i.output for i in self.neuralNetList if i.position is Position.LAST]
+        return [i.output for i in self.neuralNetList if i.position is Position.LAST.value]
 
 if __name__ == '__main__':
     a = INeuralNetwork(position=Position.FIRST)

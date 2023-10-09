@@ -19,14 +19,16 @@ class State(Enum):
 
 
 class INeuralNetwork:
+    
+    input = []
+    output = []
+    readyPreviousNN = []
 
     def __init__(self, position=Position.MIDDLE) -> None:
         # self.shape = (inputShape, outputShape)
         # self.position = position
         # self.next_NN = [] # Next neural network list
         # self.previous_NN = []
-        self.input = []
-        self.output = []
         self.readyPreviousNN = []
 
     def __init__(self):
