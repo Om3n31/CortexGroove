@@ -1,6 +1,5 @@
 from typing import Any
 from CortexBack.controller.CortexManager import CortexManager
-from CortexBack.utils.SingletonMeta import api_action
 from django.db import models
 from main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
@@ -9,6 +8,7 @@ from rest_framework import status
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from CortexBack.utils.tools import api_action
 
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
@@ -55,7 +55,6 @@ class TFLayerTypeOption(models.Model):
 class TFLayerType(models.Model):
     name = models.TextField() 
     options = models.ManyToManyField(TFLayerTypeOption, blank=True) 
-    
 
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)

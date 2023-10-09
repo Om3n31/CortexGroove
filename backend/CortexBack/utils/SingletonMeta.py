@@ -16,14 +16,3 @@ class SingletonMeta(type):
             instance = super().__call__(*args, **kwargs)
             cls._instances[cls] = instance
         return cls._instances[cls]
-    
-
-
-def api_action(name, method):
-    def wrapper(func):
-        func.api_action = {
-            'name': name,
-            'method': method
-        }
-        return func
-    return wrapper
