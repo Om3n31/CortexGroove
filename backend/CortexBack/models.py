@@ -3,6 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from .models import Layer
+
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
     state = models.TextField()
@@ -53,3 +58,10 @@ class Workspace(models.Model):
         # workspace = Workspace.objects.first() # Change this line to get the correct Workspace instance
         # workspace.doAction()
         return Response({"status": "success"}, status=status.HTTP_200_OK)
+
+
+@receiver(post_save, sender=Layer)
+def new_layer_handler(sender, instance, created, **kwargs):
+    if created:
+        # Trigger logic here
+        print(f"New layer added: {instance.index}")
