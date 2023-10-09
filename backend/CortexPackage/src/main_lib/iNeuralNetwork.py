@@ -9,6 +9,10 @@ class Position(Enum):
     MIDDLE = 1
     LAST = 2
 
+    @classmethod
+    def format(cls):
+        return [(member.value, member.name) for member in cls]
+
 class State(Enum):
     IDLE = 0
     WORKING = 1

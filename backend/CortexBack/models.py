@@ -1,12 +1,12 @@
+from typing import Any
 from django.db import models
+from main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-from .models import Layer
 
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
@@ -17,18 +17,19 @@ class NeuralNetwork(models.Model):
     hdf5 = models.ForeignKey(HDF5, on_delete=models.CASCADE)
     input_shape = models.JSONField()  # int table
 
-class Layer(models.Model):
-    index = models.IntegerField()
-
-class NeuralNetworkConfig(models.Model):
-    neural_network = models.OneToOneField(NeuralNetwork, on_delete=models.CASCADE)  # N:1
-    post_nn = models.ManyToManyField(NeuralNetwork, related_name='post_nn_configs')  # N:N
-    pre_nn = models.ManyToManyField(NeuralNetwork, related_name='pre_nn_configs')  # N:N
-    layer = models.ForeignKey(Layer, on_delete=models.CASCADE)
-
 class Cortex(models.Model):
     metadata = models.TextField()  # string
-    layers = models.ManyToManyField(Layer)  # List of Layer
+    
+class NeuralNetworkConfig(models.Model):
+    neural_network = models.OneToOneField(NeuralNetwork, null=True, on_delete=models.CASCADE)  # N:1
+    next_NN = models.ManyToManyField('self', blank=True)  # N:N
+    previous_NN = models.ManyToManyField('self', blank=True)  # N:N
+    cortex = models.ForeignKey(Cortex, default=None, on_delete=models.CASCADE)
+    position = models.IntegerField(default=1, choices=Position.format())
+
+    # def __init__(self, *args: Any, **kwargs: Any) -> None:
+    #     super().__init__(*args, **kwargs)
+
 
 # @functools.wraps
 def api_action(name, method):
@@ -50,9 +51,3 @@ class Workspace(models.Model):
         # workspace.doAction()
         return Response({"status": "success"}, status=status.HTTP_200_OK)
 
-
-@receiver(post_save, sender=Layer)
-def new_layer_handler(sender, instance, created, **kwargs):
-    if created:
-        # Trigger logic here
-        print(f"New layer added: {instance.index}")
