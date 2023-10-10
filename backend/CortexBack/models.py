@@ -31,7 +31,7 @@ class TFOption(models.Model):
 
 class Layer(models.Model):
     name = models.TextField()
-    type = models.OneToOneField(TFLayerType, on_delete=models.CASCADE)
+    type = models.OneToOneField(TFLayerType, null=True, on_delete=models.CASCADE)
     options = models.ManyToManyField(TFOption, blank=True)
 
 class NeuralNetwork(models.Model):
