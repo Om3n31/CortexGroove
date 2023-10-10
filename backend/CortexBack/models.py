@@ -15,9 +15,31 @@ class HDF5(models.Model):
     state = models.TextField()
     allowed_methods = ['get']
 
+
+class TFLayerTypeOption(models.Model):
+    name = models.TextField(default=None)
+    type = models.TextField()
+    possible_values = models.JSONField()
+
+class TFLayerType(models.Model):
+    name = models.TextField() 
+    options = models.ManyToManyField(to=TFLayerTypeOption, blank=True)
+
+class TFOption(models.Model):
+    option = models.OneToOneField(TFLayerTypeOption, on_delete=models.CASCADE)
+    option_name = models.TextField()
+
+class Layer(models.Model):
+    name = models.TextField()
+    type = models.OneToOneField(TFLayerType, on_delete=models.CASCADE)
+    options = models.ManyToManyField(TFOption, blank=True)
+
 class NeuralNetwork(models.Model):
-    hdf5 = models.ForeignKey(HDF5, on_delete=models.CASCADE)
-    input_shape = models.JSONField()  # int table
+    hdf5 = models.ForeignKey(HDF5, null=True, on_delete=models.CASCADE)
+    # input_shape = models.JSONField()  # int table
+
+    name = models.TextField()
+    layers = models.ManyToManyField(Layer, blank=True)
 
 class Cortex(models.Model):
     metadata = models.TextField()  # string
@@ -46,8 +68,6 @@ class NeuralNetworkConfig(models.Model, INeuralNetwork):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.__init__ = lambda self: None
-
-
 
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
