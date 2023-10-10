@@ -1,5 +1,6 @@
 from typing import Any
-from .controller.CortexManager import CortexManager
+from CortexBack.controller.CortexManager import CortexManager
+from CortexBack.utils.SingletonMeta import api_action
 from django.db import models
 from CortexPackage.src.main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
@@ -8,16 +9,37 @@ from rest_framework import status
  
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .utils.tools import api_action
 
 class HDF5(models.Model):
     data = models.BinaryField()  # Binaries
     state = models.TextField()
     allowed_methods = ['get']
 
+
+class TFLayerTypeOption(models.Model):
+    name = models.TextField(default=None)
+    type = models.TextField()
+    possible_values = models.JSONField()
+
+class TFLayerType(models.Model):
+    name = models.TextField() 
+    options = models.ManyToManyField(to=TFLayerTypeOption, blank=True)
+
+class TFOption(models.Model):
+    option = models.OneToOneField(TFLayerTypeOption, on_delete=models.CASCADE)
+    option_name = models.TextField()
+
+class Layer(models.Model):
+    name = models.TextField()
+    type = models.OneToOneField(TFLayerType, on_delete=models.CASCADE)
+    options = models.ManyToManyField(TFOption, blank=True)
+
 class NeuralNetwork(models.Model):
-    hdf5 = models.ForeignKey(HDF5, on_delete=models.CASCADE)
-    input_shape = models.JSONField()  # int table
+    hdf5 = models.ForeignKey(HDF5, null=True, on_delete=models.CASCADE)
+    # input_shape = models.JSONField()  # int table
+
+    name = models.TextField()
+    layers = models.ManyToManyField(Layer, blank=True)
 
 class Cortex(models.Model):
     metadata = models.TextField()  # string
@@ -46,15 +68,6 @@ class NeuralNetworkConfig(models.Model, INeuralNetwork):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.__init__ = lambda self: None
-
-class TFLayerTypeOption(models.Model):
-    name = models.TextField()
-    type = models.TextField()
-    possible_values = models.JSONField()
-
-class TFLayerType(models.Model):
-    name = models.TextField() 
-    options = models.ManyToManyField(TFLayerTypeOption, blank=True) 
 
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
