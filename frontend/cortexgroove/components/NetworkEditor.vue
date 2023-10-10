@@ -45,6 +45,7 @@
 <script setup lang="ts">
 
     import { ref } from 'vue';
+    import { Network, Layer, LayerType, LayerOption } from '../interfaces/NetworkInterfaces';
 
     let showCreationPopup = ref(false);
     let showEditionPopup = ref(false);
@@ -58,7 +59,7 @@
     let layerToEdit = ref<Layer>(defaultLayer);
 
     let networkName = ref<string>('');
-    let network = ref<Network>({name: '', layers: []});
+    let network = ref<Network>({ id: undefined, name: '', layers: [] });
 
     function addLayer(name: string, type: LayerType, options: { option: LayerOption, optionValue: string|number|undefined }[]): void {
         
@@ -105,8 +106,12 @@
         showEditionPopup.value = false;
     }
 
-    function createNetwork() {
+    async function createNetwork() {
         //call to back to create network
+        await $fetch( '/localhost:8000/neuralnetwork/', {
+            method: 'POST',
+            body: network
+        });
     }
 
     function makeLayerGoLeft(layer: Layer, index: number)  {
@@ -128,31 +133,4 @@
         network.value.layers[index] = network.value.layers[index+1];
         network.value.layers[index+1] = layerToMove;
     }
-
-    interface Network {
-        name: string,
-        layers: Layer[]
-    }
-
-    interface Layer {
-        name: string,
-        type: LayerType,
-        options: {
-            option: LayerOption,
-            optionValue: string|number|undefined 
-        }[]
-    }
-
-    interface LayerType {
-		id: number,
-		name: string,
-		options: number[]
-	}
-
-	interface LayerOption {
-		id: number,
-		name: string,
-		possible_values: string[],
-		type: string
-	}
 </script>
