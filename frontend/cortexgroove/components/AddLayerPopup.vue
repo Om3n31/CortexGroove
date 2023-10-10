@@ -54,6 +54,8 @@
 
 <script setup lang="ts">
 
+	import { Network, Layer, LayerType, LayerOption } from '../interfaces/NetworkInterfaces';
+
 	const props = defineProps({
 		network: {
 			type: Object as () => Network, 
@@ -102,33 +104,4 @@
 		selectedLayerTypeOptions.value = [];
 		emit('close');
 	}
-
-    interface Network {
-        name: string,
-        layers: Layer[]
-        
-    }
-
-    interface Layer {
-        name: string,
-        type: LayerType,
-        options: {
-            option: LayerOption,
-            optionValue: string|number|undefined 
-        }[]
-    }
-
-	interface LayerType {
-		id: number,
-		name: string,
-		options: number[]
-	}
-
-	interface LayerOption {
-		id: number,
-		name: string,
-		possible_values: string[],
-		type: string
-	}
-
 </script>
