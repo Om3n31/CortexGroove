@@ -18,7 +18,6 @@ from .utils.CustomSerializer import CustomSerializer
 from django.contrib import admin
 from django.apps import apps
 from django.urls import path, include
-from overrides import override
 from rest_framework.authtoken import views as auth_views
 from rest_framework.routers import DefaultRouter
 from rest_framework import serializers, viewsets

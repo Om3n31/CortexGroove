@@ -1,6 +1,6 @@
 from typing import Any
 from CortexBack.controller.CortexManager import CortexManager
-from CortexBack.utils.SingletonMeta import api_action
+from CortexBack.utils.tools import api_action
 from django.db import models
 from CortexPackage.src.main_lib.iNeuralNetwork import INeuralNetwork, Position
 from rest_framework.decorators import api_view
