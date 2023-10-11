@@ -26,18 +26,17 @@ class TFLayerType(models.Model):
     options = models.ManyToManyField(to=TFLayerTypeOption, blank=True)
 
 class TFOption(models.Model):
-    option = models.OneToOneField(TFLayerTypeOption, on_delete=models.CASCADE)
-    option_name = models.TextField()
+    option = models.ForeignKey(TFLayerTypeOption, on_delete=models.CASCADE)
+    option_value = models.TextField()
 
 class Layer(models.Model):
     name = models.TextField()
-    type = models.OneToOneField(TFLayerType, null=True, on_delete=models.CASCADE)
+    type = models.ForeignKey(TFLayerType, null=True, on_delete=models.CASCADE)
     options = models.ManyToManyField(TFOption, blank=True)
 
 class NeuralNetwork(models.Model):
     hdf5 = models.ForeignKey(HDF5, null=True, on_delete=models.CASCADE)
     # input_shape = models.JSONField()  # int table
-
     name = models.TextField()
     layers = models.ManyToManyField(Layer, blank=True)
 
@@ -70,7 +69,7 @@ class NeuralNetworkConfig(models.Model, INeuralNetwork):
         cls.__init__ = lambda self: None
 
 class Workspace(models.Model):
-    cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
+    cortex = models.ForeignKey(Cortex, on_delete=models.CASCADE)
 
     @api_action('do_action', 'POST')
     def do_action(self, request, pk=None):

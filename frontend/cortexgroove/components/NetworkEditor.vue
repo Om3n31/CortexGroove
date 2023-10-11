@@ -45,7 +45,7 @@
 <script setup lang="ts">
 
     import { ref } from 'vue';
-    import { Network, Layer, LayerType, LayerOption } from '../interfaces/NetworkInterfaces';
+    import { Network, Layer, LayerType, LayerOption, DBLayer } from '../interfaces/NetworkInterfaces';
 
     let showCreationPopup = ref(false);
     let showEditionPopup = ref(false);
@@ -107,11 +107,47 @@
     }
 
     async function createNetwork() {
-        //call to back to create network
+
+        let layers: DBLayer[] = [];
+
+        //loop through each layer options 
+        network.value.layers.forEach(layer => {
+
+            let newLayer = {
+                name: layer.name,
+                type: layer.type.id,
+                options: []
+            }
+            let optionId: number = 0;
+
+            layer.options.forEach(async(option) => {
+                
+                option.optionValue = option.optionValue?.toString();
+                
+                /*
+                optionId = await $fetch<number>('/localhost:8000/tfoption/', {
+                    method: 'POST',
+                    body: { 
+                        option: option.option.id,
+                        option_value: option.optionValue
+                    }
+                });
+                */
+                let response: number | null = await useFetch<number>('http://localhost:8000/tflayertype/?format=json').data.value;
+                optionId = response ? response : 0;
+
+                newLayer.options.push(optionId);
+            });
+
+            layers.push(newLayer);
+        });
+
+        /*
         await $fetch( '/localhost:8000/neuralnetwork/', {
             method: 'POST',
             body: network
         });
+        */
     }
 
     function makeLayerGoLeft(layer: Layer, index: number)  {
