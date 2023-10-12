@@ -20,19 +20,19 @@ class State(Enum):
 
 class INeuralNetwork:
     
-    input = []
-    output = []
-    readyPreviousNN = []
+    # input = []
+    # output = []
+    # readyPreviousNN = []
 
     def __init__(self, position=Position.MIDDLE) -> None:
         # self.shape = (inputShape, outputShape)
-        # self.position = position
-        # self.next_NN = [] # Next neural network list
-        # self.previous_NN = []
+        
+        self.input = []
+        self.output = []
+        self.position = position
+        self.next_NN = [] # Next neural network list
+        self.previous_NN = []
         self.readyPreviousNN = []
-
-    def __init__(self):
-        pass
 
     def predict_network(self, data, previous_nn=None):
         self.input.extend(data[:])
@@ -52,4 +52,3 @@ class INeuralNetwork:
     @abstractclassmethod
     def execute(self, data):
         return data
-

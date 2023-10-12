@@ -31,67 +31,14 @@ from django.db import models
 
 router = DefaultRouter()
 
-def generic_create_method(model):
-    """
-    Generate a create method for models with ManyToManyFields.
-    """
-    def create(self, validated_data):
-        related_fields = [f.name for f in model._meta.get_fields() if isinstance(f, models.ManyToManyField)]
-        
-        related_data = {}
-        for field in related_fields:
-            related_data[field] = validated_data.pop(field, [])
-        
-        instance = model.objects.create(**validated_data)
-        
-        for field, related_objs_data in related_data.items():
-            related_model = model._meta.get_field(field).related_model
-            for obj_data in related_objs_data:
-                related_model.objects.create(**obj_data)
-                instance.__getattribute__(field).add(obj_data)
-
-        return instance
-
-    return create
-
-class CustomTemp(serializers.ModelSerializer):
-
-    def validate(self, attrs):
-        value = super().validate(attrs)
-        return value
-    
-    def validated_data(self):
-        return super().validated_data
-    
-serializers_list = []
-
 for model in apps.get_models():
     model_name = model.__name__
 
-    
-    # # Define the Meta class for the serializer
-    # meta_class = type('Meta', (object,), {'model': model, 'fields': '__all__'})
-
-    # # Define the base attributes and methods for the serializer
-    # serializer_attrs = {'Meta': meta_class}
-
-    # # Check if the model has ManyToManyFields
-    # if any(isinstance(f, models.ManyToManyField) for f in model._meta.get_fields()):
-    #     serializer_attrs['create'] = generic_create_method(model)
-
-    # # Create the serializer class
-    # serializer = type(f'{model_name}Serializer', (serializers.SerializerMetaclass,), serializer_attrs)
-    
     serializer = type(
         f'{model_name}Serializer', 
         (serializers.ModelSerializer,),
         {'Meta': type('Meta', (object,), {'model': model, 'fields': '__all__'})}
     )
-    
-    
-    # set the validate method of the serializer
-    # serializer.validate = validate
-    # serializer.create = generic_create_method(model)
 
     # Get the allowed methods from the model
     allowed_methods = getattr(model, 'allowed_methods', ['get', 'post', 'head', 'put', 'options', 'patch', 'delete'])
