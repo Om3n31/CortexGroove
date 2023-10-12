@@ -54,20 +54,18 @@ class Cortex(models.Model):
         # workspace.doAction()
         return Response({"status": "success", "data" : str(data)}, status=status.HTTP_200_OK)
     
-class NeuralNetworkConfig(models.Model, INeuralNetwork):
+class NeuralNetworkConfig(models.Model):
     neural_network = models.OneToOneField(NeuralNetwork, null=True, on_delete=models.CASCADE)  # N:1
-    next_NN = models.ManyToManyField('self', blank=True)  # N:N
-    previous_NN = models.ManyToManyField('self', blank=True)  # N:N
+    next_neural_network = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='link_next_neural_network')  # N:N
+    previous_neural_network = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='link_previous_neural_network')  # N:N
     cortex = models.ForeignKey(Cortex, default=None, on_delete=models.CASCADE)
-    position = models.IntegerField(default=1, choices=Position.format())
+    nn_position = models.IntegerField(default=1, choices=Position.format())
 
-    # def __init__(self, *args: Any, **kwargs: Any) -> None:
-    #     super().__init__(*args, **kwargs)
+    def get_next_ids(self):
+        return [nn.id for nn in self.next_neural_network.all()]
     
-    @classmethod
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        cls.__init__ = lambda self: None
+    def get_previous_ids(self):
+        return [nn.id for nn in self.previous_neural_network.all()]
 
 class Workspace(models.Model):
     cortex = models.OneToOneField(Cortex, on_delete=models.CASCADE)
