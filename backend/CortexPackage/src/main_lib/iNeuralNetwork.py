@@ -2,7 +2,7 @@
 from abc import abstractclassmethod
 from enum import Enum
 
-from main_lib.tools import are_lists_equal
+from .tools import are_lists_equal
 
 class Position(Enum):
     FIRST = 0

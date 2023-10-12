@@ -1,10 +1,10 @@
-from main_lib.iNeuralNetwork import INeuralNetwork, Position
+from .iNeuralNetwork import INeuralNetwork, Position
 # Local creation
 
 # from iNeuralNetwork import INeuralNetwork
 # from iNeuralNetwork import Position
 # from main_lib.INeuralNetwork import INeuralNetwork
-from main_lib.tools import *
+from .tools import *
 
 class Engine:
 
