@@ -1,4 +1,7 @@
 <template>
+    <Transition>
+        <AddNetworkToEditorPopup v-show="showAddNetworkPopup" @addNetwork="addNetwork" @close="closeAddNetworkPopup"></AddNetworkToEditorPopup>
+    </Transition>    
     <div>
       <canvas id="canvas" class="border-2 border-white rounded-lg w-full"></canvas>
     </div>
@@ -21,6 +24,7 @@
     import {GraphicalNeuralNetwork} from "../classes/GraphicalNeuralNetwork"
     import {Canvas} from "../classes/Canvas"
     import * as paper from "paper";
+    import {Network} from "../interfaces/NetworkInterfaces"
     
     const canvas = new Canvas();
 
@@ -31,10 +35,20 @@
         onLink: ['menu-item-delete-link'],
     };
 
-    let addNetwork: () => void;
+    let showAddNetworkPopup = ref(false);
+
+    let openAddNetworkPopup: () => void;
+
+    const closeAddNetworkPopup: () => void = () => {
+        showAddNetworkPopup.value = false;
+    };
+
+    let addNetwork: (network : Network) => void;
     let deleteNetwork: () => void;
     let deleteLink: () => void;
     
+
+
     const closeContextMenu = () => {
             const contextMenu = document.getElementById('context-menu');
             if (contextMenu) {
@@ -43,7 +57,7 @@
                 // Remove event listeners
                 const addNetworkHtml = document.getElementById('menu-item-add');
                 if (addNetworkHtml) {
-                    addNetworkHtml.removeEventListener('click', addNetwork);
+                    addNetworkHtml.removeEventListener('click', openAddNetworkPopupddNetwork);
                 }
                 const deleteNetworkHtml = document.getElementById('menu-item-delete-NN');
                 if (deleteNetworkHtml) {
@@ -85,10 +99,7 @@
 
                 //Client x and y are not the same as paper.js canvas x and y
                 const x = event.clientX + scrollX;
-                const y = event.clientY + scrollY;
-
-                const contextMenuPositionInCanvas = new paper.Point(pointerInCanvas);
-    
+                const y = event.clientY + scrollY;    
 
                 //Detect if right click was on a neural network
                 let neuralNetworkClicked: GraphicalNeuralNetwork | null = null;
@@ -150,9 +161,14 @@
 
                 // CONTEXT MENU : ADD NEW NETWORK BEHAVIOR //
 
-                addNetwork = () => {
+                openAddNetworkPopup = () => {
                     if (contextMenu && contextMenu.style.display === 'block') {
-                        const networkCounter = canvas.graphicalNeuralNetworks.length;
+
+                        showAddNetworkPopup.value = true;
+                    }
+                    closeContextMenu();
+                }
+                        /*const networkCounter = canvas.graphicalNeuralNetworks.length;
                         canvas.graphicalNeuralNetworks.push(
                             new GraphicalNeuralNetwork(
                                 networkCounter,
@@ -167,8 +183,9 @@
                                 canvas
                             )
                         );
-                        closeContextMenu();
-                    }
+                        */
+                        
+                
                 };
 
                 const addNetworkHtml = document.getElementById('menu-item-add');
