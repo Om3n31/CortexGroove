@@ -1,6 +1,6 @@
 <template>
     <input type="text" v-model="networkName" placeholder="New network" class="mb-4 break-all break-words w-full text-3xl bg-slate-700 text-center font-bold"/>
-    <div @click="openCreationPopup()" class="cursor-pointer inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-slate-800 border-2 border-cortex-light-green rounded-md shadow-sm hover:bg-cortex-light-green hover:bg-opacity-30"> 
+    <div @click="openCreationPopup()" class="transition-all cursor-pointer inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-slate-800 border-2 border-cortex-light-green rounded-md shadow-sm hover:bg-cortex-light-green hover:bg-opacity-30"> 
         + Add a layer
     </div>
     <Transition>
@@ -12,15 +12,15 @@
     <div class="p-2 border-2 border-cortex-green rounded-lg my-2 flex gap-2 border-dashed overflow-x-scroll">
         <div class="w-2/12 border-2 border-cortex-light-green rounded-lg flex" v-for="(layer, index) in network.layers" :key="layer.name">
 
-            <div @click="makeLayerGoLeft(layer, index)" class="flex items-center rounded-l-lg border-r-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30">
+            <div @click="makeLayerGoLeft(layer, index)" class="flex items-center rounded-l-lg border-r-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30 transition-all">
                 <img src="../assets/images/arrow-left.png"/>
             </div>
 
             <div class="w-10/12 p-2">
                 <div class="flex justify-between">
-                    <button @click="openEditionPopup(layer)" class="bg-slate-800 hover:bg-cortex-light-green hover:bg-opacity-30 p-1 rounded-lg w-[2vw] h-[2vw] border-2 border-cortex-light-green cursor-pointer"><img src="../assets/images/edit.svg"/></button>
+                    <button @click="openEditionPopup(layer)" class="bg-slate-800 hover:bg-cortex-light-green hover:bg-opacity-30 p-1 rounded-lg w-[2vw] h-[2vw] border-2 border-cortex-light-green cursor-pointer transition-all"><img src="../assets/images/edit.svg"/></button>
                     <div class="text-lg text-center py-2 max-w-[60%]"> {{ layer.name }}</div>
-                    <button @click="removeLayer(index)" class="bg-slate-800 hover:bg-red-700 hover:bg-opacity-30 p-1 rounded-lg w-[2vw] h-[2vw] border-2 border-red-500 cursor-pointer"><img src="../assets/images/trash.svg"/></button>
+                    <button @click="removeLayer(index)" class="bg-slate-800 hover:bg-red-700 hover:bg-opacity-30 p-1 rounded-lg w-[2vw] h-[2vw] border-2 border-red-500 cursor-pointer transition-all"><img src="../assets/images/trash.svg"/></button>
                 </div>
                 <div class="mb-2 flex justify-between border-b border-dashed border-opacity-50  ">
                     <div class="text-sm font-mono">Type</div>
@@ -32,13 +32,13 @@
                 </div>
             </div>
 
-            <div @click="makeLayerGoRight(layer, index)" class="flex items-center rounded-r-lg border-l-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30">
+            <div @click="makeLayerGoRight(layer, index)" class="flex items-center rounded-r-lg border-l-2 border-cortex-light-green w-1/12 bg-slate-800 cursor-pointer hover:bg-cortex-light-green hover:bg-opacity-30 transition-all">
                 <img src="../assets/images/arrow-right.png"/>
             </div>
 
         </div>
     </div>
-    <div @click="createNetwork()" class="cursor-pointer inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-slate-800 border-2 border-cortex-light-green rounded-md shadow-sm hover:bg-cortex-light-green hover:bg-opacity-30"> 
+    <div @click="createNetwork()" class="cursor-pointer inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-slate-800 border-2 border-cortex-light-green rounded-md shadow-sm hover:bg-cortex-light-green hover:bg-opacity-30 transition-all"> 
         Confirm
     </div>
 </template>
@@ -116,25 +116,30 @@
             let newLayer = {
                 name: layer.name,
                 type: layer.type.id,
-                options: []
-            }
-            let optionId: number = 0;
+                options: [] as number[]
+            } as DBLayer;
 
+            let optionId: number = 0;
+            console.log(layer.options);
+            layer.options = Object.values(layer.options);
             layer.options.forEach(async(option) => {
                 
                 option.optionValue = option.optionValue?.toString();
                 
-                /*
-                optionId = await $fetch<number>('/localhost:8000/tfoption/', {
-                    method: 'POST',
-                    body: { 
-                        option: option.option.id,
-                        option_value: option.optionValue
+                let response: number | null = await useFetch<number>(
+                    'http://localhost:8000/tfoption/', 
+                    {
+                        method: 'post',
+                        body: { 
+                            option: option.option.id,
+                            option_value: option.optionValue
+                        }
                     }
-                });
-                */
-                let response: number | null = await useFetch<number>('http://localhost:8000/tflayertype/?format=json').data.value;
+                ).data.value;
+
                 optionId = response ? response : 0;
+                
+                console.log(optionId);
 
                 newLayer.options.push(optionId);
             });

@@ -111,7 +111,6 @@ for model in apps.get_models():
 
     router.register(rf'{model_name.lower()}', viewset)
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

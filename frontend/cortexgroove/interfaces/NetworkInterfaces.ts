@@ -21,7 +21,7 @@ export interface Layer {
 
 export interface DBLayer {
     name: string,
-    type: LayerType,
+    type: number,
     options: number[]
 }
 
